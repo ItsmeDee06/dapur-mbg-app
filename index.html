@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Dapur MBG</title>
+  <!-- Menghubungkan ke file CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="dashboard-header"><h1>Dashboard Operasional Dapur MBG</h1></div>
+
+    <!-- DASHBOARD UTAMA -->
+    <div id="dashboard-view" class="dashboard-view">
+      <div class="dashboard-grid">
+        <div class="top-metrics">
+          <div class="metric-card yellow"><div class="metric-title">Total Pengiriman</div><div class="metric-value" id="valSekolah">-</div></div>
+          <div class="metric-card teal"><div class="metric-title">Porsi Hari Ini</div><div class="metric-value" id="valPorsi">-</div></div>
+          <div class="metric-card salmon"><div class="metric-title">Tanggal Operasional</div><div class="metric-value" id="valTanggal" style="font-size: 22px; margin-top: 8px;">-</div></div>
+        </div>
+
+        <div class="school-section">
+          <div class="section-title">Data Distribusi Sekolah</div>
+          <div class="school-list" id="schoolListContainer">
+            <div style="text-align:center; color:#64748b; padding:20px;">Memuat data operasional...</div>
+          </div>
+        </div>
+
+        <div class="nav-bottom-section">
+          <div class="section-title">Menu Formulir Dapur</div>
+          <div class="nav-grid">
+            <button type="button" class="nav-card" onclick="openForm('form-absensi')"><h3>📝 Absensi Reguler</h3></button>
+            <button type="button" class="nav-card" onclick="openForm('form-backup')"><h3>👥 Absensi Backup</h3></button>
+            <button type="button" class="nav-card" onclick="openForm('form-barang')"><h3>📦 Logistik Masuk</h3></button>
+            <button type="button" class="nav-card" onclick="openForm('form-distribusi')"><h3>🚚 Pendistribusian</h3></button>
+            <button type="button" class="nav-card" onclick="openForm('form-sampah')"><h3>♻️ Sisa Sampah</h3></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM ABSENSI REGULER -->
+    <div id="form-absensi" class="form-container">
+      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+      <div class="section-title">Form Absensi Reguler</div>
+      <div class="alert-info">Tim <b>Persiapan, Pengolahan, dan Asisten Lapangan</b> yang absen di atas jam 15:00 otomatis tercatat untuk esok hari.</div>
+      <form id="formAbsensi" onsubmit="handleFormSubmit(event, 'Absensi'); return false;">
+        <!-- Penambahan Datalist untuk Autocomplete -->
+        <div class="form-group">
+          <label>Nama Relawan</label>
+          <input type="text" id="namaRelawan" list="databaseNama" autocomplete="off" required>
+        </div>
+        <div class="form-group"><label>Status</label><select id="statusAbsen" required><option value="" disabled selected>Pilih Status</option><option value="IN">Check-In</option><option value="OUT">Check-Out</option></select></div>
+        <div class="form-group"><label>Divisi Kerja</label>
+          <select id="divisiRelawan" required>
+            <option value="" disabled selected>Pilih Divisi</option>
+            <option value="Admin">Admin</option><option value="Asisten Lapangan">Asisten Lapangan</option><option value="Persiapan">Persiapan</option><option value="Pengolahan">Pengolahan</option>
+            <option value="Pemorsian">Pemorsian</option><option value="Distribusi">Distribusi</option><option value="Cuci Foodtray">Cuci Foodtray</option><option value="Kebersihan">Kebersihan</option>
+            <option value="Keamanan">Keamanan</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Foto Kehadiran</label><input type="file" id="fotoAbsen" accept="image/*" required></div>
+        <button type="submit" class="btn-submit" id="btn-Absensi">Kirim Data Absen</button>
+      </form>
+    </div>
+
+    <!-- FORM ABSENSI BACKUP -->
+    <div id="form-backup" class="form-container">
+      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+      <div class="section-title">Form Absensi Backup</div>
+      <form id="formAbsensiBackup" onsubmit="handleFormSubmit(event, 'Absensi_Backup'); return false;">
+        <div class="form-group">
+          <label>Nama Relawan (Backup)</label>
+          <input type="text" id="namaRelawan_Backup" list="databaseNama" autocomplete="off" required>
+        </div>
+        <div class="form-group"><label>Status</label><select id="statusAbsen_Backup" required><option value="" disabled selected>Pilih Status</option><option value="IN">Check-In</option><option value="OUT">Check-Out</option></select></div>
+        <div class="form-group"><label>Divisi Kerja</label>
+          <select id="divisiRelawan_Backup" required>
+            <option value="" disabled selected>Pilih Divisi</option>
+            <option value="Admin">Admin</option><option value="Asisten Lapangan">Asisten Lapangan</option><option value="Persiapan">Persiapan</option><option value="Pengolahan">Pengolahan</option>
+            <option value="Pemorsian">Pemorsian</option><option value="Distribusi">Distribusi</option><option value="Cuci Foodtray">Cuci Foodtray</option><option value="Kebersihan">Kebersihan</option>
+            <option value="Keamanan">Keamanan</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Foto Kehadiran</label><input type="file" id="fotoAbsen_Backup" accept="image/*" required></div>
+        <button type="submit" class="btn-submit" id="btn-Absensi_Backup">Kirim Absen Backup</button>
+      </form>
+    </div>
+
+    <!-- FORM BARANG DATANG -->
+    <div id="form-barang" class="form-container">
+      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+      <div class="section-title">Logistik Masuk</div>
+      <div class="alert-info">Barang yang masuk di atas jam 15:00 otomatis tercatat untuk menu esok hari.</div>
+      <form id="formBarang" onsubmit="handleFormSubmit(event, 'Barang_Datang'); return false;">
+        <div class="form-group"><label>Nama Barang</label><input type="text" id="namaBarang" required></div>
+        <div class="form-group"><label>Jumlah Volume</label><input type="number" id="jumlahBarang" step="any" required></div>
+        <div class="form-group"><label>Satuan</label>
+          <select id="satuanBarang" required>
+            <option value="" disabled selected>Pilih Satuan</option>
+            <option value="Kg">Kg</option><option value="Liter">Liter</option><option value="Ikat">Ikat</option><option value="Pcs">Pcs</option>
+            <option value="Karung">Karung</option><option value="Dus">Dus</option><option value="Botol">Botol</option><option value="Ons">Ons</option><option value="Pack">Pack</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Sumber / Ket</label><input type="text" id="ketBarang"></div>
+        <div class="form-group"><label>Foto Fisik Barang</label><input type="file" id="fotoBarang" accept="image/*" required></div>
+        <button type="submit" class="btn-submit" id="btn-Barang_Datang">Simpan Logistik</button>
+      </form>
+    </div>
+
+    <!-- FORM DISTRIBUSI -->
+    <div id="form-distribusi" class="form-container">
+      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+      <div class="section-title">Laporan Distribusi</div>
+      <form id="formDistribusi" onsubmit="handleFormSubmit(event, 'Pendistribusian'); return false;">
+        <div class="form-group"><label>Nama Sekolah</label><input type="text" id="namaSekolah" required></div>
+        <div class="form-group"><label>Total Foodtray</label><input type="number" id="jumlahFoodtray" required></div>
+        <div class="form-group"><label>Nama PJ / Kurir</label><input type="text" id="kurirDistribusi"></div>
+        <div class="form-group"><label>Foto Penyerahan</label><input type="file" id="fotoDistribusi" accept="image/*" required></div>
+        <button type="submit" class="btn-submit" id="btn-Pendistribusian">Kirim Laporan</button>
+      </form>
+    </div>
+
+    <!-- FORM DATA SAMPAH -->
+    <div id="form-sampah" class="form-container">
+      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+      <div class="section-title">Laporan Sisa Sampah</div>
+      <form id="formSampah" onsubmit="handleFormSubmit(event, 'Data_Sampah'); return false;">
+        <div class="form-group"><label>Nama Sekolah</label><input type="text" id="namaSekolahSampah" required></div>
+        <div class="form-group"><label>Menu Makanan</label><input type="text" id="menuSampah" required></div>
+        <div class="form-group"><label>Total Berat Sampah (Kg)</label><input type="number" step="any" id="beratSampah" required></div>
+        <div class="form-group"><label>Foto Bukti Penimbangan</label><input type="file" id="fotoSampah" accept="image/*" required></div>
+        <button type="submit" class="btn-submit" id="btn-Data_Sampah">Kirim Data Sampah</button>
+      </form>
+    </div>
+
+    <!-- HALAMAN SUKSES MODAL -->
+    <div id="success-view" class="form-container" style="text-align: center;">
+      <div class="success-icon-circle">✓</div>
+      <h2 style="border: none; margin-bottom: 8px; color: var(--navy-header);">Laporan Sukses Terkirim!</h2>
+      <p id="successMessageText" style="color: var(--text-muted); margin-bottom: 25px; font-size: 14.5px; line-height: 1.4;"></p>
+      <button type="button" class="btn-submit btn-finish" onclick="backToDashboardFromSuccess()">Selesai & Kembali ke Beranda</button>
+    </div>
+
+    <!-- Wadah Data Nama Otomatis -->
+    <datalist id="databaseNama"></datalist>
+
+    <div id="loadingText" class="loading">Mengompresi dan memproses foto ke server...</div>
+    <div id="msgBox" class="message"></div>
+  </div>
+
+  <!-- Menghubungkan ke file Mesin JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+:root {
+  --bg-main: #f8fafc;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --card-yellow: #fde68a;
+  --card-teal: #99f6e4;
+  --card-salmon: #fecaca;
+  --navy-header: #1e3a8a;
+  --success-green: #22c55e;
+}
+
+* { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
+body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 40px; }
+.container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+.dashboard-header { text-align: center; margin-bottom: 25px; }
+.dashboard-header h1 { font-size: 24px; font-weight: 800; color: var(--navy-header); text-transform: uppercase; letter-spacing: 1px; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+@media (max-width: 768px) { 
+  .dashboard-grid { display: flex; flex-direction: column; gap: 15px; }
+  .top-metrics { order: 1; }
+  .nav-bottom-section { order: 2; margin-top: 0; }
+  .school-section { order: 3; }
+  .calendar-section { order: 4; }
+  .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .nav-card { padding: 12px 10px; }
+  .nav-card h3 { font-size: 13px; }
+  .metric-value { font-size: 26px; }
+  .metric-card { padding: 15px; }
+  .school-list { max-height: 180px; }
+  .calendar-section, .school-section { padding: 15px; }
+}
+
+.top-metrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+.metric-card { padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+.metric-card.yellow { background-color: var(--card-yellow); color: #92400e; }
+.metric-card.teal { background-color: var(--card-teal); color: #0f766e; }
+.metric-card.salmon { background-color: var(--card-salmon); color: #9f1239; }
+.metric-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.8; }
+.metric-value { font-size: 32px; font-weight: 800; }
+
+.calendar-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+.section-title { font-size: 15px; font-weight: 700; color: var(--navy-header); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+.cal-day-header { font-size: 12px; font-weight: 700; color: var(--text-muted); padding: 5px 0; }
+.cal-day { font-size: 14px; padding: 10px 0; border-radius: 6px; background-color: #f8fafc; font-weight: 500; }
+.cal-day.empty { background-color: transparent; }
+.cal-day.today { background-color: var(--navy-header); color: white; font-weight: 700; box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.4); }
+.cal-month-title { text-align: center; font-weight: 700; margin-bottom: 15px; color: var(--navy-header); }
+
+.school-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+.school-list { display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; }
+.school-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--card-teal); }
+.school-info h4 { font-size: 14px; color: var(--text-dark); margin-bottom: 2px; }
+.school-info p { font-size: 12px; color: var(--text-muted); }
+.school-portion { font-size: 16px; font-weight: 700; color: var(--navy-header); }
+
+.nav-bottom-section { grid-column: 1 / -1; margin-top: 10px; }
+.nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.nav-card { background: white; border: 2px solid #e2e8f0; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); width: 100%; }
+.nav-card:hover { border-color: var(--navy-header); transform: translateY(-2px); }
+.nav-card h3 { font-size: 14px; font-weight: 700; color: var(--navy-header); }
+
+.form-container { display: none; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; }
+.form-container.active { display: block; }
+.dashboard-view.hidden { display: none; }
+
+.btn-back { display: inline-block; margin-bottom: 20px; background: #e2e8f0; color: var(--text-dark); padding: 8px 16px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; }
+.btn-back:hover { background: #cbd5e1; }
+.form-group { margin-bottom: 16px; }
+label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
+input[type="text"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; }
+input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--navy-header); background: white; }
+input[type="file"] { display: block; width: 100%; font-size: 13.5px; margin-top: 4px; }
+
+.btn-submit { width: 100%; background-color: var(--navy-header); color: white; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+.btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
+.alert-info { background-color: #e0f2fe; color: #0369a1; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; border: 1px solid #bae6fd; line-height: 1.4; }
+
+.message { padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 14px; display: none; text-align: center; }
+.success { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.loading { text-align: center; font-size: 13.5px; color: var(--text-muted); margin-top: 12px; display: none; }
+
+.success-icon-circle { width: 70px; height: 70px; background: #dcfce7; color: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; font-weight: bold; margin: 0 auto 20px auto; }
+.btn-finish { background-color: var(--success-green); color: white; }
+.btn-finish:hover { background-color: #16a34a; }
