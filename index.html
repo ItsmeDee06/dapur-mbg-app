@@ -47,21 +47,41 @@
       <div class="section-title">Form Absensi Reguler</div>
       <div class="alert-info">Tim <b>Persiapan, Pengolahan, dan Asisten Lapangan</b> yang absen di atas jam 15:00 otomatis tercatat untuk esok hari.</div>
       <form id="formAbsensi" onsubmit="handleFormSubmit(event, 'Absensi'); return false;">
-        <!-- Penambahan Datalist untuk Autocomplete -->
+        
+        <div class="form-group">
+          <label>Pilih Status Kehadiran</label>
+          <div class="radio-group-2">
+            <input type="radio" id="in_reguler" name="statusAbsen" value="IN" required>
+            <label for="in_reguler" class="radio-card status-in">🟢 MASUK (Check-In)</label>
+            <input type="radio" id="out_reguler" name="statusAbsen" value="OUT" required>
+            <label for="out_reguler" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Divisi Kerja</label>
+          <div class="radio-grid-divisi">
+            <input type="radio" id="div1" name="divisiRelawan" value="Admin" required><label for="div1" class="radio-card-div">Admin</label>
+            <input type="radio" id="div2" name="divisiRelawan" value="Asisten Lapangan" required><label for="div2" class="radio-card-div">As. Lapangan</label>
+            <input type="radio" id="div3" name="divisiRelawan" value="Persiapan" required><label for="div3" class="radio-card-div">Persiapan</label>
+            <input type="radio" id="div4" name="divisiRelawan" value="Pengolahan" required><label for="div4" class="radio-card-div">Pengolahan</label>
+            <input type="radio" id="div5" name="divisiRelawan" value="Pemorsian" required><label for="div5" class="radio-card-div">Pemorsian</label>
+            <input type="radio" id="div6" name="divisiRelawan" value="Distribusi" required><label for="div6" class="radio-card-div">Distribusi</label>
+            <input type="radio" id="div7" name="divisiRelawan" value="Cuci Foodtray" required><label for="div7" class="radio-card-div">Cuci Foodtray</label>
+            <input type="radio" id="div8" name="divisiRelawan" value="Kebersihan" required><label for="div8" class="radio-card-div">Kebersihan</label>
+            <input type="radio" id="div9" name="divisiRelawan" value="Keamanan" required><label for="div9" class="radio-card-div">Keamanan</label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label>Nama Relawan</label>
-          <input type="text" id="namaRelawan" list="databaseNama" autocomplete="off" required>
+          <input type="text" id="namaRelawan" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
-        <div class="form-group"><label>Status</label><select id="statusAbsen" required><option value="" disabled selected>Pilih Status</option><option value="IN">Check-In</option><option value="OUT">Check-Out</option></select></div>
-        <div class="form-group"><label>Divisi Kerja</label>
-          <select id="divisiRelawan" required>
-            <option value="" disabled selected>Pilih Divisi</option>
-            <option value="Admin">Admin</option><option value="Asisten Lapangan">Asisten Lapangan</option><option value="Persiapan">Persiapan</option><option value="Pengolahan">Pengolahan</option>
-            <option value="Pemorsian">Pemorsian</option><option value="Distribusi">Distribusi</option><option value="Cuci Foodtray">Cuci Foodtray</option><option value="Kebersihan">Kebersihan</option>
-            <option value="Keamanan">Keamanan</option>
-          </select>
+
+        <div class="form-group">
+          <label>Foto Kehadiran</label>
+          <input type="file" id="fotoAbsen" accept="image/*" required>
         </div>
-        <div class="form-group"><label>Foto Kehadiran</label><input type="file" id="fotoAbsen" accept="image/*" required></div>
         <button type="submit" class="btn-submit" id="btn-Absensi">Kirim Data Absen</button>
       </form>
     </div>
@@ -71,20 +91,41 @@
       <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
       <div class="section-title">Form Absensi Backup</div>
       <form id="formAbsensiBackup" onsubmit="handleFormSubmit(event, 'Absensi_Backup'); return false;">
+        
+        <div class="form-group">
+          <label>Pilih Status Kehadiran</label>
+          <div class="radio-group-2">
+            <input type="radio" id="in_backup" name="statusAbsen_Backup" value="IN" required>
+            <label for="in_backup" class="radio-card status-in">🟢 MASUK (Check-In)</label>
+            <input type="radio" id="out_backup" name="statusAbsen_Backup" value="OUT" required>
+            <label for="out_backup" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Divisi Kerja (Backup)</label>
+          <div class="radio-grid-divisi">
+            <input type="radio" id="b_div1" name="divisiRelawan_Backup" value="Admin" required><label for="b_div1" class="radio-card-div">Admin</label>
+            <input type="radio" id="b_div2" name="divisiRelawan_Backup" value="Asisten Lapangan" required><label for="b_div2" class="radio-card-div">As. Lapangan</label>
+            <input type="radio" id="b_div3" name="divisiRelawan_Backup" value="Persiapan" required><label for="b_div3" class="radio-card-div">Persiapan</label>
+            <input type="radio" id="b_div4" name="divisiRelawan_Backup" value="Pengolahan" required><label for="b_div4" class="radio-card-div">Pengolahan</label>
+            <input type="radio" id="b_div5" name="divisiRelawan_Backup" value="Pemorsian" required><label for="b_div5" class="radio-card-div">Pemorsian</label>
+            <input type="radio" id="b_div6" name="divisiRelawan_Backup" value="Distribusi" required><label for="b_div6" class="radio-card-div">Distribusi</label>
+            <input type="radio" id="b_div7" name="divisiRelawan_Backup" value="Cuci Foodtray" required><label for="b_div7" class="radio-card-div">Cuci Foodtray</label>
+            <input type="radio" id="b_div8" name="divisiRelawan_Backup" value="Kebersihan" required><label for="b_div8" class="radio-card-div">Kebersihan</label>
+            <input type="radio" id="b_div9" name="divisiRelawan_Backup" value="Keamanan" required><label for="b_div9" class="radio-card-div">Keamanan</label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label>Nama Relawan (Backup)</label>
-          <input type="text" id="namaRelawan_Backup" list="databaseNama" autocomplete="off" required>
+          <input type="text" id="namaRelawan_Backup" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
-        <div class="form-group"><label>Status</label><select id="statusAbsen_Backup" required><option value="" disabled selected>Pilih Status</option><option value="IN">Check-In</option><option value="OUT">Check-Out</option></select></div>
-        <div class="form-group"><label>Divisi Kerja</label>
-          <select id="divisiRelawan_Backup" required>
-            <option value="" disabled selected>Pilih Divisi</option>
-            <option value="Admin">Admin</option><option value="Asisten Lapangan">Asisten Lapangan</option><option value="Persiapan">Persiapan</option><option value="Pengolahan">Pengolahan</option>
-            <option value="Pemorsian">Pemorsian</option><option value="Distribusi">Distribusi</option><option value="Cuci Foodtray">Cuci Foodtray</option><option value="Kebersihan">Kebersihan</option>
-            <option value="Keamanan">Keamanan</option>
-          </select>
+
+        <div class="form-group">
+          <label>Foto Kehadiran</label>
+          <input type="file" id="fotoAbsen_Backup" accept="image/*" required>
         </div>
-        <div class="form-group"><label>Foto Kehadiran</label><input type="file" id="fotoAbsen_Backup" accept="image/*" required></div>
         <button type="submit" class="btn-submit" id="btn-Absensi_Backup">Kirim Absen Backup</button>
       </form>
     </div>
