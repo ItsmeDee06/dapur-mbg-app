@@ -128,10 +128,18 @@ function handleFormSubmit(event, type) {
     
   try {
     if (type === 'Absensi') {
-      formData = { nama: document.getElementById('namaRelawan').value, status: document.getElementById('statusAbsen').value, divisi: document.getElementById('divisiRelawan').value };
+      formData = { 
+        nama: document.getElementById('namaRelawan').value, 
+        status: document.querySelector('input[name="statusAbsen"]:checked').value, 
+        divisi: document.querySelector('input[name="divisiRelawan"]:checked').value 
+      };
       fileInput = document.getElementById('fotoAbsen');
     } else if (type === 'Absensi_Backup') {
-      formData = { nama: document.getElementById('namaRelawan_Backup').value, status: document.getElementById('statusAbsen_Backup').value, divisi: document.getElementById('divisiRelawan_Backup').value };
+      formData = { 
+        nama: document.getElementById('namaRelawan_Backup').value, 
+        status: document.querySelector('input[name="statusAbsen_Backup"]:checked').value, 
+        divisi: document.querySelector('input[name="divisiRelawan_Backup"]:checked').value 
+      };
       fileInput = document.getElementById('fotoAbsen_Backup');
     } else if (type === 'Barang_Datang') {
       formData = { namaBarang: document.getElementById('namaBarang').value, jumlah: document.getElementById('jumlahBarang').value, satuan: document.getElementById('satuanBarang').value, keterangan: document.getElementById('ketBarang').value };
