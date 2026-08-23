@@ -96,7 +96,9 @@ function compressAndUpload(file, callback) {
         const img = new Image();  
         img.onload = function() {  
           const canvas = document.createElement('canvas');  
-          const MAX_WIDTH = 800; const MAX_HEIGHT = 800; // Kompresi ringan anti gagal
+          
+          // Resolusi dikecilkan menjadi 600px agar HP RAM kecil tidak crash
+          const MAX_WIDTH = 600; const MAX_HEIGHT = 600; 
           let width = img.width; let height = img.height;  
   
           if (width > height) {  
@@ -104,34 +106,16 @@ function compressAndUpload(file, callback) {
           } else {  
             if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }  
           }  
+          
           canvas.width = width; canvas.height = height;  
           const ctx = canvas.getContext('2d');  
-          
-          // 1. Menggambar foto asli dari kamera ke dalam Canvas
           ctx.drawImage(img, 0, 0, width, height);  
-          
-          // ==========================================
-          // 2. FITUR BARU: MENCETAK TIMESTAMP DI ATAS FOTO
-          // ==========================================
-          const waktuSekarang = new Date();
-          const teksWaktu = waktuSekarang.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-          
-          // Desain Teks: Ukuran 30px, warna Kuning dengan pinggiran (outline) Hitam 
-          // agar teks selalu terbaca meski background fotonya gelap/terang
-          ctx.font = "bold 30px Arial";
-          ctx.fillStyle = "yellow";
-          ctx.strokeStyle = "black";
-          ctx.lineWidth = 4;a
-          
-          // Menulis teks di pojok kiri bawah (X: 20, Y: tinggi gambar - 30)
-          ctx.strokeText("Waktu: " + teksWaktu, 20, height - 30);
-          ctx.fillText("Waktu: " + teksWaktu, 20, height - 30);
-          // ==========================================
             
-          // 3. Simpan dan kirim ke server (Kualitas 50% super cepat)
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.5);  
+          // Kualitas diturunkan ke 40% (0.4) agar loading upload super cepat
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.4);  
           callback(dataUrl);  
         }  
+        // Jika terjadi error saat memuat gambar, langsung kirim gambar aslinya saja
         img.onerror = function() { callback(e.target.result); }   
         img.src = e.target.result;  
       }  
