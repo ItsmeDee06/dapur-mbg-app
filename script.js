@@ -90,32 +90,53 @@ function muatDataDashboard() {
 
 window.onload = function() { muatDataDashboard(); };
 
-function compressAndUpload(file, callback) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const MAX_WIDTH = 1000; const MAX_HEIGHT = 1000;
-      let width = img.width; let height = img.height;
-
-      if (width > height) {
-        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-      } else {
-        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-      }
-      canvas.width = width; canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-        
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-      callback(dataUrl);
+function compressAndUpload(file, callback) {  
+      const reader = new FileReader();  
+      reader.onload = function(e) {  
+        const img = new Image();  
+        img.onload = function() {  
+          const canvas = document.createElement('canvas');  
+          const MAX_WIDTH = 800; const MAX_HEIGHT = 800; // Kompresi ringan anti gagal
+          let width = img.width; let height = img.height;  
+  
+          if (width > height) {  
+            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }  
+          } else {  
+            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }  
+          }  
+          canvas.width = width; canvas.height = height;  
+          const ctx = canvas.getContext('2d');  
+          
+          // 1. Menggambar foto asli dari kamera ke dalam Canvas
+          ctx.drawImage(img, 0, 0, width, height);  
+          
+          // ==========================================
+          // 2. FITUR BARU: MENCETAK TIMESTAMP DI ATAS FOTO
+          // ==========================================
+          const waktuSekarang = new Date();
+          const teksWaktu = waktuSekarang.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+          
+          // Desain Teks: Ukuran 30px, warna Kuning dengan pinggiran (outline) Hitam 
+          // agar teks selalu terbaca meski background fotonya gelap/terang
+          ctx.font = "bold 30px Arial";
+          ctx.fillStyle = "yellow";
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 4;a
+          
+          // Menulis teks di pojok kiri bawah (X: 20, Y: tinggi gambar - 30)
+          ctx.strokeText("Waktu: " + teksWaktu, 20, height - 30);
+          ctx.fillText("Waktu: " + teksWaktu, 20, height - 30);
+          // ==========================================
+            
+          // 3. Simpan dan kirim ke server (Kualitas 50% super cepat)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.5);  
+          callback(dataUrl);  
+        }  
+        img.onerror = function() { callback(e.target.result); }   
+        img.src = e.target.result;  
+      }  
+      reader.readAsDataURL(file);  
     }
-    img.onerror = function() { callback(e.target.result); } 
-    img.src = e.target.result;
-  }
-  reader.readAsDataURL(file);
-}
 
 // FUNGSI PENGIRIMAN DATA DENGAN FETCH API
 function handleFormSubmit(event, type) {
