@@ -4,8 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Dapur MBG</title>
-  <!-- Menghubungkan ke file CSS -->
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --card-yellow: #fde68a;
+      --card-teal: #99f6e4;
+      --card-salmon: #fecaca;
+      --navy-header: #1e3a8a;
+      --success-green: #22c55e;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 40px; }
+    .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+    .dashboard-header { text-align: center; margin-bottom: 25px; }
+    .dashboard-header h1 { font-size: 24px; font-weight: 800; color: var(--navy-header); text-transform: uppercase; letter-spacing: 1px; }
+
+    .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+    @media (max-width: 768px) { 
+      .dashboard-grid { display: flex; flex-direction: column; gap: 15px; }
+      .top-metrics { order: 1; }
+      .nav-bottom-section { order: 2; margin-top: 0; }
+      .school-section { order: 3; }
+      .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .nav-card { padding: 12px 10px; }
+      .nav-card h3 { font-size: 13px; }
+      .metric-value { font-size: 26px; }
+      .metric-card { padding: 15px; }
+      .school-list { max-height: 180px; }
+      .school-section { padding: 15px; }
+    }
+
+    .top-metrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .metric-card { padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .metric-card.yellow { background-color: var(--card-yellow); color: #92400e; }
+    .metric-card.teal { background-color: var(--card-teal); color: #0f766e; }
+    .metric-card.salmon { background-color: var(--card-salmon); color: #9f1239; }
+    .metric-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.8; }
+    .metric-value { font-size: 32px; font-weight: 800; }
+
+    .school-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+    .section-title { font-size: 15px; font-weight: 700; color: var(--navy-header); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+    .school-list { display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; }
+    .school-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--card-teal); }
+    .school-info h4 { font-size: 14px; color: var(--text-dark); margin-bottom: 2px; }
+    .school-info p { font-size: 12px; color: var(--text-muted); }
+    .school-portion { font-size: 16px; font-weight: 700; color: var(--navy-header); }
+
+    .nav-bottom-section { grid-column: 1 / -1; margin-top: 10px; }
+    .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .nav-card { background: white; border: 2px solid #e2e8f0; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); width: 100%; }
+    .nav-card:hover { border-color: var(--navy-header); transform: translateY(-2px); }
+    .nav-card h3 { font-size: 14px; font-weight: 700; color: var(--navy-header); }
+
+    .form-container { display: none; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; }
+    .form-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .dashboard-view.hidden { display: none; }
+
+    .btn-back { display: inline-block; margin-bottom: 20px; background: #e2e8f0; color: var(--text-dark); padding: 8px 16px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-back:hover { background: #cbd5e1; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
+    input[type="text"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: border-color 0.2s; }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--navy-header); background: white; }
+    input[type="file"] { display: block; width: 100%; font-size: 13.5px; margin-top: 4px; }
+
+    .btn-submit { width: 100%; background-color: var(--navy-header); color: white; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
+    .btn-submit:hover { background-color: #1e40af; }
+    .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
+    .alert-info { background-color: #e0f2fe; color: #0369a1; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; border: 1px solid #bae6fd; line-height: 1.4; }
+
+    .message { padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 14px; display: none; text-align: center; }
+    .success { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    .loading { text-align: center; font-size: 13.5px; color: var(--text-muted); margin-top: 12px; display: none; font-weight: 600; }
+
+    .success-icon-circle { width: 70px; height: 70px; background: #dcfce7; color: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; font-weight: bold; margin: 0 auto 20px auto; }
+    .btn-finish { background-color: var(--success-green); color: white; }
+    .btn-finish:hover { background-color: #16a34a; }
+
+    /* RADIO CARDS (Status & Divisi) */
+    .radio-group-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; margin-top: 5px; }
+    .radio-group-2 input[type="radio"] { display: none; }
+    .radio-card { display: flex; align-items: center; justify-content: center; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; transition: 0.2s; background: white; font-size: 14px; color: var(--text-muted); }
+    .radio-card.status-in { border-color: #86efac; }
+    .radio-card.status-out { border-color: #fca5a5; }
+    .radio-group-2 input[type="radio"]:checked + .status-in { background-color: #dcfce7; border-color: #22c55e; color: #15803d; box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2); }
+    .radio-group-2 input[type="radio"]:checked + .status-out { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
+
+    .radio-grid-divisi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; margin-top: 5px; }
+    .radio-grid-divisi input[type="radio"] { display: none; }
+    .radio-card-div { display: flex; align-items: center; justify-content: center; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; background: #f8fafc; font-size: 13px; color: var(--text-muted); }
+    .radio-grid-divisi input[type="radio"]:checked + .radio-card-div { background-color: var(--navy-header); border-color: var(--navy-header); color: white; box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3); }
+  </style>
 </head>
 <body>
 
@@ -47,7 +142,6 @@
       <div class="section-title">Form Absensi Reguler</div>
       <div class="alert-info">Tim <b>Persiapan, Pengolahan, dan Asisten Lapangan</b> yang absen di atas jam 15:00 otomatis tercatat untuk esok hari.</div>
       <form id="formAbsensi" onsubmit="handleFormSubmit(event, 'Absensi'); return false;">
-        
         <div class="form-group">
           <label>Pilih Status Kehadiran</label>
           <div class="radio-group-2">
@@ -57,7 +151,6 @@
             <label for="out_reguler" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
           </div>
         </div>
-
         <div class="form-group">
           <label>Divisi Kerja</label>
           <div class="radio-grid-divisi">
@@ -72,12 +165,10 @@
             <input type="radio" id="div9" name="divisiRelawan" value="Keamanan" required><label for="div9" class="radio-card-div">Keamanan</label>
           </div>
         </div>
-
         <div class="form-group">
           <label>Nama Relawan</label>
           <input type="text" id="namaRelawan" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
-
         <div class="form-group">
           <label>Foto Kehadiran</label>
           <input type="file" id="fotoAbsen" accept="image/*" required>
@@ -91,7 +182,6 @@
       <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
       <div class="section-title">Form Absensi Backup</div>
       <form id="formAbsensiBackup" onsubmit="handleFormSubmit(event, 'Absensi_Backup'); return false;">
-        
         <div class="form-group">
           <label>Pilih Status Kehadiran</label>
           <div class="radio-group-2">
@@ -101,7 +191,6 @@
             <label for="out_backup" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
           </div>
         </div>
-
         <div class="form-group">
           <label>Divisi Kerja (Backup)</label>
           <div class="radio-grid-divisi">
@@ -116,12 +205,10 @@
             <input type="radio" id="b_div9" name="divisiRelawan_Backup" value="Keamanan" required><label for="b_div9" class="radio-card-div">Keamanan</label>
           </div>
         </div>
-
         <div class="form-group">
           <label>Nama Relawan (Backup)</label>
           <input type="text" id="namaRelawan_Backup" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
-
         <div class="form-group">
           <label>Foto Kehadiran</label>
           <input type="file" id="fotoAbsen_Backup" accept="image/*" required>
@@ -177,7 +264,7 @@
       </form>
     </div>
 
-    <!-- HALAMAN SUKSES MODAL -->
+    <!-- HALAMAN SUKSES -->
     <div id="success-view" class="form-container" style="text-align: center;">
       <div class="success-icon-circle">✓</div>
       <h2 style="border: none; margin-bottom: 8px; color: var(--navy-header);">Laporan Sukses Terkirim!</h2>
@@ -188,11 +275,254 @@
     <!-- Wadah Data Nama Otomatis -->
     <datalist id="databaseNama"></datalist>
 
-    <div id="loadingText" class="loading">Mengompresi dan memproses foto ke server...</div>
+    <div id="loadingText" class="loading">⏳ Memproses & Mengirim data ke server... Mohon tunggu.</div>
     <div id="msgBox" class="message"></div>
   </div>
 
-  <!-- Menghubungkan ke file Mesin JavaScript -->
-  <script src="script.js"></script>
+  <script>
+    // ==========================================================
+    // URL API GOOGLE APPS SCRIPT ANDA (Pastikan link ini benar)
+    // ==========================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbzncXiGiIn5BH89EH57s_kfSJnB8UDFtX9fTex203Nh9XgBBXwPN4PFAPdBkXW-KimH/exec";
+
+    const formIdMap = {
+      'Absensi': 'formAbsensi',
+      'Absensi_Backup': 'formAbsensiBackup',
+      'Barang_Datang': 'formBarang',
+      'Pendistribusian': 'formDistribusi',
+      'Data_Sampah': 'formSampah'
+    };
+
+    function openForm(formId) {
+      document.getElementById('dashboard-view').classList.add('hidden');
+      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+      document.getElementById(formId).classList.add('active');
+      document.getElementById('msgBox').style.display = 'none';
+    }
+
+    function backToDashboard() {
+      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('msgBox').style.display = 'none';
+    }
+
+    function backToDashboardFromSuccess() {
+      document.getElementById('success-view').classList.remove('active');
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      muatDataDashboard(); 
+    }
+
+    function showMessage(text, isSuccess) {
+      const msgBox = document.getElementById('msgBox');
+      msgBox.innerText = text;
+      msgBox.className = 'message ' + (isSuccess ? 'success' : 'error');
+      msgBox.style.display = 'block';
+    }
+
+    // FUNGSI TARIK DATA DENGAN FETCH API (Robust / Tahan Gagal)
+    function muatDataDashboard() {
+      const date = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('valTanggal').innerText = date.toLocaleDateString('id-ID', options);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 detik max loading dashboard
+
+      fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "getDashboardData" }),
+        signal: controller.signal
+      })
+      .then(async response => {
+        const textValue = await response.text();
+        try {
+          return JSON.parse(textValue);
+        } catch (e) {
+          console.error("Respon bukan JSON:", textValue);
+          throw new Error("Server gagal merespon dengan benar. Pastikan URL API Deployment diset ke 'Anyone'.");
+        }
+      })
+      .then(data => {
+        clearTimeout(timeoutId);
+        if (!data || data.error) {
+          console.error(data?.message || "Data Error");
+          return;
+        }
+        document.getElementById('valPorsi').innerText = data.totalPorsi || 0;
+        
+        let listHTML = "";
+        let totalSekolahAktif = 0;
+        
+        if (data.sekolah && data.sekolah.length > 0) {
+          data.sekolah.forEach(function(row) {
+            if (row[0]) { 
+              totalSekolahAktif++;
+              listHTML += `
+                <div class="school-item">
+                  <div class="school-info"><h4>${row[0]}</h4><p>⏱ Jadwal: ${row[1] || '-'}</p></div>
+                  <div class="school-portion">${row[2] || 0} Porsi</div>
+                </div>`;
+            }
+          });
+        }
+        
+        if (listHTML === "") listHTML = "<div style='text-align:center; color:#64748b; padding:20px;'>Belum ada jadwal</div>";
+        document.getElementById('schoolListContainer').innerHTML = listHTML;
+        document.getElementById('valSekolah').innerText = totalSekolahAktif + " Titik";
+
+        if (data.namaRelawan && data.namaRelawan.length > 0) {
+          let namaHTML = "";
+          data.namaRelawan.forEach(function(nama) {
+            namaHTML += `<option value="${nama}">`;
+          });
+          document.getElementById('databaseNama').innerHTML = namaHTML;
+        }
+      })
+      .catch(err => {
+        clearTimeout(timeoutId);
+        console.error("Gagal memuat data dari server", err);
+        document.getElementById('schoolListContainer').innerHTML = "<div style='text-align:center; color:#b91c1c; padding:20px;'>Gagal terhubung ke server Google. Refresh halaman.</div>";
+      });
+    }
+
+    window.onload = function() { muatDataDashboard(); };
+
+    // KOMPRESI GAMBAR AGAR UPLOAD LEBIH CEPAT
+    function compressAndUpload(file, callback) {  
+      const reader = new FileReader();  
+      reader.onload = function(e) {  
+        const img = new Image();  
+        img.onload = function() {  
+          const canvas = document.createElement('canvas');  
+          const MAX_WIDTH = 600; const MAX_HEIGHT = 600; 
+          let width = img.width; let height = img.height;  
+  
+          if (width > height) {  
+            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }  
+          } else {  
+            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }  
+          }  
+          
+          canvas.width = width; canvas.height = height;  
+          const ctx = canvas.getContext('2d');  
+          ctx.drawImage(img, 0, 0, width, height);  
+            
+          // Kualitas 40% sangat mempercepat upload namun masih jelas untuk verifikasi
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.4);  
+          callback(dataUrl);  
+        }  
+        img.onerror = function() { callback(e.target.result); }   
+        img.src = e.target.result;  
+      }  
+      reader.readAsDataURL(file);  
+    }
+
+    // PENGIRIMAN DATA (ANTI-BUG / TIMEOUT HANDLER)
+    function handleFormSubmit(event, type) {
+      event.preventDefault(); 
+      const btn = document.getElementById('btn-' + type);
+      const loading = document.getElementById('loadingText');
+        
+      btn.disabled = true; loading.style.display = 'block'; document.getElementById('msgBox').style.display = 'none';
+      let formData = {}; let fileInput = null;
+        
+      try {
+        if (type === 'Absensi') {
+          const statusEl = document.querySelector('input[name="statusAbsen"]:checked');
+          const divisiEl = document.querySelector('input[name="divisiRelawan"]:checked');
+          if(!statusEl || !divisiEl) throw new Error("Pilih Status dan Divisi terlebih dahulu.");
+          
+          formData = { 
+            nama: document.getElementById('namaRelawan').value, 
+            status: statusEl.value, 
+            divisi: divisiEl.value 
+          };
+          fileInput = document.getElementById('fotoAbsen');
+        } else if (type === 'Absensi_Backup') {
+          const statusEl = document.querySelector('input[name="statusAbsen_Backup"]:checked');
+          const divisiEl = document.querySelector('input[name="divisiRelawan_Backup"]:checked');
+          if(!statusEl || !divisiEl) throw new Error("Pilih Status dan Divisi terlebih dahulu.");
+
+          formData = { 
+            nama: document.getElementById('namaRelawan_Backup').value, 
+            status: statusEl.value, 
+            divisi: divisiEl.value 
+          };
+          fileInput = document.getElementById('fotoAbsen_Backup');
+        } else if (type === 'Barang_Datang') {
+          formData = { namaBarang: document.getElementById('namaBarang').value, jumlah: document.getElementById('jumlahBarang').value, satuan: document.getElementById('satuanBarang').value, keterangan: document.getElementById('ketBarang').value };
+          fileInput = document.getElementById('fotoBarang');
+        } else if (type === 'Pendistribusian') {
+          formData = { sekolah: document.getElementById('namaSekolah').value, jumlahFoodtray: document.getElementById('jumlahFoodtray').value, kurir: document.getElementById('kurirDistribusi').value };
+          fileInput = document.getElementById('fotoDistribusi');
+        } else if (type === 'Data_Sampah') {
+          formData = { sekolah: document.getElementById('namaSekolahSampah').value, menu: document.getElementById('menuSampah').value, berat: document.getElementById('beratSampah').value };
+          fileInput = document.getElementById('fotoSampah');
+        }
+          
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+          const fileAsli = fileInput.files[0];
+          compressAndUpload(fileAsli, function(base64Data) {
+            const fileData = { base64: base64Data, name: fileAsli.name, type: 'image/jpeg' };
+              
+            const controller = new AbortController();
+            // Batas waktu pengiriman data adalah 45 Detik
+            const timeoutId = setTimeout(() => controller.abort(), 45000); 
+
+            fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({
+                action: "upload",
+                formType: type,
+                data: formData,
+                fileData: fileData
+              }),
+              signal: controller.signal
+            })
+            .then(async response => {
+              const textValue = await response.text();
+              try {
+                return JSON.parse(textValue);
+              } catch (e) {
+                console.error("Respon bukan JSON:", textValue);
+                throw new Error("Server mengembalikan format tidak valid (Cek URL Web App).");
+              }
+            })
+            .then(res => {
+              clearTimeout(timeoutId);
+              btn.disabled = false; loading.style.display = 'none';
+              if (res.success) { 
+                const targetFormId = formIdMap[type];
+                if (targetFormId) { document.getElementById(targetFormId).reset(); }
+                  
+                document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+                document.getElementById('dashboard-view').classList.add('hidden');
+                  
+                document.getElementById('successMessageText').innerText = res.message;
+                document.getElementById('success-view').classList.add('active');
+              } else { 
+                showMessage("Gagal tersimpan: " + res.message, false); 
+              }
+            })
+            .catch(err => {
+              clearTimeout(timeoutId);
+              btn.disabled = false; loading.style.display = 'none'; 
+              if (err.name === 'AbortError') {
+                showMessage("Gagal. Koneksi internet terputus atau sangat lambat (Timeout). Silakan coba lagi.", false);
+              } else {
+                showMessage("Error Jaringan / Server tidak merespon.", false);
+              }
+            });
+          });
+        } else {
+          btn.disabled = false; loading.style.display = 'none'; showMessage("Foto wajib dilampirkan.", false);
+        }
+      } catch (err) {
+        btn.disabled = false; loading.style.display = 'none'; showMessage("Error sistem form: " + err, false);
+      }
+    }
+  </script>
 </body>
 </html>
