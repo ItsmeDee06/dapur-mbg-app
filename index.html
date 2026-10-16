@@ -2,153 +2,246 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Dashboard Dapur MBG</title>
+  
+  <!-- Font Modern dari Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg-main: #f8fafc;
-      --text-dark: #1e293b;
+      /* Palet Warna Profesional */
+      --bg-body: #f1f5f9;
+      --bg-surface: #ffffff;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --text-main: #0f172a;
       --text-muted: #64748b;
-      --card-yellow: #fde68a;
-      --card-teal: #99f6e4;
-      --card-salmon: #fecaca;
-      --navy-header: #1e3a8a;
-      --success-green: #22c55e;
+      --border-color: #e2e8f0;
+      
+      /* Status Colors */
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --warning: #ea580c;
+      --warning-bg: #ffedd5;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
-    body { background-color: var(--bg-main); color: var(--text-dark); padding-bottom: 40px; }
-    .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
-    .dashboard-header { text-align: center; margin-bottom: 25px; }
-    .dashboard-header h1 { font-size: 24px; font-weight: 800; color: var(--navy-header); text-transform: uppercase; letter-spacing: 1px; }
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 60px; -webkit-font-smoothing: antialiased; }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
 
-    .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    /* HEADER */
+    .app-header { background: var(--bg-surface); padding: 20px 0; text-align: center; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; }
+    .app-header h1 { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .app-header .logo-icon { background: var(--primary); color: white; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
-    @media (max-width: 768px) { 
-      .dashboard-grid { display: flex; flex-direction: column; gap: 15px; }
-      .top-metrics { order: 1; }
-      .nav-bottom-section { order: 2; margin-top: 0; }
-      .school-section { order: 3; }
-      .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .nav-card { padding: 12px 10px; }
-      .nav-card h3 { font-size: 13px; }
-      .metric-value { font-size: 26px; }
-      .metric-card { padding: 15px; }
-      .school-list { max-height: 180px; }
-      .school-section { padding: 15px; }
-    }
+    /* GRID & LAYOUT */
+    .dashboard-grid { display: flex; flex-direction: column; gap: 24px; }
 
-    .top-metrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .metric-card { padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    .metric-card.yellow { background-color: var(--card-yellow); color: #92400e; }
-    .metric-card.teal { background-color: var(--card-teal); color: #0f766e; }
-    .metric-card.salmon { background-color: var(--card-salmon); color: #9f1239; }
-    .metric-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.8; }
-    .metric-value { font-size: 32px; font-weight: 800; }
+    /* METRIK CARDS (TOP) */
+    .top-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .metric-card { background: var(--bg-surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; transition: transform 0.2s; }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .metric-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+    .metric-icon.blue { background-color: var(--primary-light); color: var(--primary); }
+    .metric-icon.orange { background-color: var(--warning-bg); color: var(--warning); }
+    .metric-icon.green { background-color: var(--success-bg); color: var(--success); }
+    .metric-info { flex-grow: 1; }
+    .metric-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .metric-value { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; }
 
-    .school-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-    .section-title { font-size: 15px; font-weight: 700; color: var(--navy-header); text-transform: uppercase; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
-    .school-list { display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; }
-    .school-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--card-teal); }
-    .school-info h4 { font-size: 14px; color: var(--text-dark); margin-bottom: 2px; }
-    .school-info p { font-size: 12px; color: var(--text-muted); }
-    .school-portion { font-size: 16px; font-weight: 700; color: var(--navy-header); }
+    /* SECTION STYLE */
+    .section-card { background: var(--bg-surface); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
+    .section-title { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .section-title::before { content: ""; display: block; width: 4px; height: 18px; background: var(--primary); border-radius: 4px; }
 
-    .nav-bottom-section { grid-column: 1 / -1; margin-top: 10px; }
-    .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-    .nav-card { background: white; border: 2px solid #e2e8f0; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); width: 100%; }
-    .nav-card:hover { border-color: var(--navy-header); transform: translateY(-2px); }
-    .nav-card h3 { font-size: 14px; font-weight: 700; color: var(--navy-header); }
+    /* SCHOOL LIST */
+    .school-list { display: grid; grid-template-columns: 1fr; gap: 12px; max-height: 350px; overflow-y: auto; padding-right: 5px; }
+    .school-list::-webkit-scrollbar { width: 6px; }
+    .school-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .school-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; transition: all 0.2s; }
+    .school-item:hover { border-color: #bae6fd; background: #f0f9ff; }
+    .school-info h4 { font-size: 15px; color: var(--text-main); margin-bottom: 4px; font-weight: 600; }
+    .school-info p { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+    .school-portion { font-size: 16px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 6px 12px; border-radius: 8px; white-space: nowrap; }
 
-    .form-container { display: none; background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; }
-    .form-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .dashboard-view.hidden { display: none; }
+    /* NAV MENU (BOTTOM) */
+    .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+    .nav-card { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 20px 10px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; appearance: none; outline: none; }
+    .nav-card:hover, .nav-card:active { border-color: var(--primary); transform: translateY(-4px); box-shadow: var(--shadow-md); background: var(--primary-light); }
+    .nav-icon-large { font-size: 32px; }
+    .nav-card h3 { font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
 
-    .btn-back { display: inline-block; margin-bottom: 20px; background: #e2e8f0; color: var(--text-dark); padding: 8px 16px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; }
-    .btn-back:hover { background: #cbd5e1; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
-    input[type="text"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #f8fafc; transition: border-color 0.2s; }
-    input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--navy-header); background: white; }
-    input[type="file"] { display: block; width: 100%; font-size: 13.5px; margin-top: 4px; }
+    /* FORMS */
+    .form-wrapper { display: none; background: var(--bg-surface); border-radius: 16px; padding: 30px 24px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); margin-top: 10px; animation: slideUp 0.3s ease-out; }
+    .form-wrapper.active { display: block; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .btn-back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 24px; background: transparent; color: var(--text-muted); padding: 0; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: color 0.2s; }
+    .btn-back:hover { color: var(--text-main); }
+    .btn-back svg { width: 18px; height: 18px; }
 
-    .btn-submit { width: 100%; background-color: var(--navy-header); color: white; border: none; padding: 14px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
-    .btn-submit:hover { background-color: #1e40af; }
-    .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
-    .alert-info { background-color: #e0f2fe; color: #0369a1; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; border: 1px solid #bae6fd; line-height: 1.4; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+    input[type="text"], input[type="number"], select { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border-color); border-radius: 10px; font-size: 15px; color: var(--text-main); background: #f8fafc; transition: all 0.2s; outline: none; }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus { border-color: var(--primary); background: var(--bg-surface); box-shadow: 0 0 0 4px var(--primary-light); }
+    
+    /* Input File Customization */
+    input[type="file"] { display: block; width: 100%; padding: 12px 16px; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 10px; font-size: 14px; color: var(--text-muted); cursor: pointer; }
+    input[type="file"]::file-selector-button { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 12px; margin-right: 12px; font-weight: 600; color: var(--text-main); cursor: pointer; transition: background 0.2s; }
+    input[type="file"]::file-selector-button:hover { background: var(--bg-body); }
 
-    .message { padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 14px; display: none; text-align: center; }
-    .success { background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-    .loading { text-align: center; font-size: 13.5px; color: var(--text-muted); margin-top: 12px; display: none; font-weight: 600; }
+    /* Primary Button */
+    .btn-submit { width: 100%; background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; margin-top: 10px; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+    .btn-submit:hover { background-color: var(--primary-hover); box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.3); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(1px); }
+    .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
 
-    .success-icon-circle { width: 70px; height: 70px; background: #dcfce7; color: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; font-weight: bold; margin: 0 auto 20px auto; }
-    .btn-finish { background-color: var(--success-green); color: white; }
-    .btn-finish:hover { background-color: #16a34a; }
+    /* Alerts & Messages */
+    .alert-info { background-color: var(--primary-light); color: var(--primary-hover); padding: 14px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 24px; border: 1px solid #bfdbfe; line-height: 1.5; display: flex; gap: 10px; }
+    .msg-box { padding: 14px 16px; border-radius: 10px; margin-top: 20px; font-size: 14px; font-weight: 500; display: none; text-align: center; animation: slideUp 0.3s; }
+    .msg-success { background-color: var(--success-bg); color: #15803d; border: 1px solid #bbf7d0; }
+    .msg-error { background-color: var(--danger-bg); color: #b91c1c; border: 1px solid #fecaca; }
 
     /* RADIO CARDS (Status & Divisi) */
-    .radio-group-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; margin-top: 5px; }
+    .radio-group-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
     .radio-group-2 input[type="radio"] { display: none; }
-    .radio-card { display: flex; align-items: center; justify-content: center; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center; transition: 0.2s; background: white; font-size: 14px; color: var(--text-muted); }
-    .radio-card.status-in { border-color: #86efac; }
-    .radio-card.status-out { border-color: #fca5a5; }
-    .radio-group-2 input[type="radio"]:checked + .status-in { background-color: #dcfce7; border-color: #22c55e; color: #15803d; box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2); }
-    .radio-group-2 input[type="radio"]:checked + .status-out { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
+    .radio-card { display: flex; align-items: center; justify-content: center; padding: 16px 12px; border: 1.5px solid var(--border-color); border-radius: 10px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; background: var(--bg-surface); font-size: 14px; color: var(--text-muted); }
+    .radio-group-2 input[type="radio"]:checked + .radio-card.status-in { background-color: var(--success-bg); border-color: var(--success); color: #15803d; }
+    .radio-group-2 input[type="radio"]:checked + .radio-card.status-out { background-color: var(--danger-bg); border-color: var(--danger); color: #b91c1c; }
 
-    .radio-grid-divisi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; margin-top: 5px; }
+    .radio-grid-divisi { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 8px; }
     .radio-grid-divisi input[type="radio"] { display: none; }
-    .radio-card-div { display: flex; align-items: center; justify-content: center; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; background: #f8fafc; font-size: 13px; color: var(--text-muted); }
-    .radio-grid-divisi input[type="radio"]:checked + .radio-card-div { background-color: var(--navy-header); border-color: var(--navy-header); color: white; box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3); }
+    .radio-card-div { display: flex; align-items: center; justify-content: center; padding: 12px 10px; border: 1.5px solid var(--border-color); border-radius: 10px; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.2s; background: #f8fafc; font-size: 13px; color: var(--text-muted); }
+    .radio-grid-divisi input[type="radio"]:checked + .radio-card-div { background-color: var(--primary); border-color: var(--primary); color: white; box-shadow: var(--shadow-sm); }
+
+    /* Loading Overlay / Spinner */
+    .loading-container { display: none; text-align: center; margin-top: 20px; }
+    .spinner { display: inline-block; width: 30px; height: 30px; border: 3px solid var(--border-color); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; margin-bottom: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+
+    /* Success View */
+    .success-view-content { text-align: center; padding: 20px 0; }
+    .success-icon-circle { width: 80px; height: 80px; background: var(--success-bg); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 24px auto; box-shadow: 0 0 0 10px #f0fdf4; }
+    .success-view-content h2 { color: var(--text-main); margin-bottom: 12px; font-size: 22px; font-weight: 800; }
+    .success-view-content p { color: var(--text-muted); font-size: 15px; margin-bottom: 30px; line-height: 1.5; }
+
+    /* Responsive Tweaks */
+    @media (max-width: 600px) {
+      .top-metrics { grid-template-columns: 1fr; }
+      .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .nav-card { padding: 16px 10px; }
+      .metric-card { padding: 16px; }
+      .form-wrapper { padding: 24px 16px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- App Header -->
+  <header class="app-header">
+    <h1><div class="logo-icon">🍳</div> Dapur MBG</h1>
+  </header>
+
   <div class="container">
-    <div class="dashboard-header"><h1>Dashboard Operasional Dapur MBG</h1></div>
-
+    
     <!-- DASHBOARD UTAMA -->
-    <div id="dashboard-view" class="dashboard-view">
-      <div class="dashboard-grid">
-        <div class="top-metrics">
-          <div class="metric-card yellow"><div class="metric-title">Total Pengiriman</div><div class="metric-value" id="valSekolah">-</div></div>
-          <div class="metric-card teal"><div class="metric-title">Porsi Hari Ini</div><div class="metric-value" id="valPorsi">-</div></div>
-          <div class="metric-card salmon"><div class="metric-title">Tanggal Operasional</div><div class="metric-value" id="valTanggal" style="font-size: 22px; margin-top: 8px;">-</div></div>
-        </div>
-
-        <div class="school-section">
-          <div class="section-title">Data Distribusi Sekolah</div>
-          <div class="school-list" id="schoolListContainer">
-            <div style="text-align:center; color:#64748b; padding:20px;">Memuat data operasional...</div>
+    <div id="dashboard-view" class="dashboard-grid">
+      
+      <!-- Top Metrics -->
+      <div class="top-metrics">
+        <div class="metric-card">
+          <div class="metric-icon blue">🚚</div>
+          <div class="metric-info">
+            <div class="metric-title">Total Pengiriman</div>
+            <div class="metric-value" id="valSekolah">-</div>
           </div>
         </div>
-
-        <div class="nav-bottom-section">
-          <div class="section-title">Menu Formulir Dapur</div>
-          <div class="nav-grid">
-            <button type="button" class="nav-card" onclick="openForm('form-absensi')"><h3>📝 Absensi Reguler</h3></button>
-            <button type="button" class="nav-card" onclick="openForm('form-backup')"><h3>👥 Absensi Backup</h3></button>
-            <button type="button" class="nav-card" onclick="openForm('form-barang')"><h3>📦 Logistik Masuk</h3></button>
-            <button type="button" class="nav-card" onclick="openForm('form-distribusi')"><h3>🚚 Pendistribusian</h3></button>
-            <button type="button" class="nav-card" onclick="openForm('form-sampah')"><h3>♻️ Sisa Sampah</h3></button>
+        <div class="metric-card">
+          <div class="metric-icon green">🍱</div>
+          <div class="metric-info">
+            <div class="metric-title">Porsi Hari Ini</div>
+            <div class="metric-value" id="valPorsi">-</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon orange">📅</div>
+          <div class="metric-info">
+            <div class="metric-title">Tanggal Operasional</div>
+            <div class="metric-value" id="valTanggal" style="font-size: 18px;">-</div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Menu Navigasi Bawah -->
+      <div class="section-card">
+        <div class="section-title">Menu Formulir</div>
+        <div class="nav-grid">
+          <button type="button" class="nav-card" onclick="openForm('form-absensi')">
+            <div class="nav-icon-large">📝</div><h3>Absensi<br>Reguler</h3>
+          </button>
+          <button type="button" class="nav-card" onclick="openForm('form-backup')">
+            <div class="nav-icon-large">👥</div><h3>Absensi<br>Backup</h3>
+          </button>
+          <button type="button" class="nav-card" onclick="openForm('form-barang')">
+            <div class="nav-icon-large">📦</div><h3>Logistik<br>Masuk</h3>
+          </button>
+          <button type="button" class="nav-card" onclick="openForm('form-distribusi')">
+            <div class="nav-icon-large">🚚</div><h3>Laporan<br>Distribusi</h3>
+          </button>
+          <button type="button" class="nav-card" onclick="openForm('form-sampah')">
+            <div class="nav-icon-large">♻️</div><h3>Sisa<br>Sampah</h3>
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Distribusi Sekolah -->
+      <div class="section-card">
+        <div class="section-title">Rincian Distribusi Sekolah</div>
+        <div class="school-list" id="schoolListContainer">
+          <div style="text-align:center; color:#64748b; padding:30px 0;">
+            <div style="font-size: 30px; margin-bottom: 10px;">⏳</div>
+            Memuat data operasional...
+          </div>
+        </div>
+      </div>
+
+    </div> 
+
+    <!-- WADAH DATALIST NAMA RELAWAN -->
+    <datalist id="databaseNama"></datalist>
 
     <!-- FORM ABSENSI REGULER -->
-    <div id="form-absensi" class="form-container">
-      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+    <div id="form-absensi" class="form-wrapper">
+      <button class="btn-back" onclick="backToDashboard()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        Kembali ke Beranda
+      </button>
       <div class="section-title">Form Absensi Reguler</div>
-      <div class="alert-info">Tim <b>Persiapan, Pengolahan, dan Asisten Lapangan</b> yang absen di atas jam 15:00 otomatis tercatat untuk esok hari.</div>
-      <form id="formAbsensi" onsubmit="handleFormSubmit(event, 'Absensi'); return false;">
+      <div class="alert-info">
+        <div>💡</div>
+        <div>Tim <b>Persiapan, Pengolahan, dan As. Lapangan</b> yang absen lewat dari jam 15:00 akan tercatat untuk esok hari.</div>
+      </div>
+      <form id="formAbsensi_El" onsubmit="handleFormSubmit(event, 'Absensi'); return false;">
         <div class="form-group">
           <label>Pilih Status Kehadiran</label>
           <div class="radio-group-2">
             <input type="radio" id="in_reguler" name="statusAbsen" value="IN" required>
-            <label for="in_reguler" class="radio-card status-in">🟢 MASUK (Check-In)</label>
+            <label for="in_reguler" class="radio-card status-in">🟢 MASUK</label>
             <input type="radio" id="out_reguler" name="statusAbsen" value="OUT" required>
-            <label for="out_reguler" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
+            <label for="out_reguler" class="radio-card status-out">🔴 KELUAR</label>
           </div>
         </div>
         <div class="form-group">
@@ -166,11 +259,11 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Nama Relawan</label>
+          <label>Nama Lengkap</label>
           <input type="text" id="namaRelawan" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
         <div class="form-group">
-          <label>Foto Kehadiran</label>
+          <label>Foto Kehadiran (Selfie)</label>
           <input type="file" id="fotoAbsen" accept="image/*" required>
         </div>
         <button type="submit" class="btn-submit" id="btn-Absensi">Kirim Data Absen</button>
@@ -178,17 +271,20 @@
     </div>
 
     <!-- FORM ABSENSI BACKUP -->
-    <div id="form-backup" class="form-container">
-      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+    <div id="form-backup" class="form-wrapper">
+      <button class="btn-back" onclick="backToDashboard()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        Kembali ke Beranda
+      </button>
       <div class="section-title">Form Absensi Backup</div>
-      <form id="formAbsensiBackup" onsubmit="handleFormSubmit(event, 'Absensi_Backup'); return false;">
+      <form id="formAbsensiBackup_El" onsubmit="handleFormSubmit(event, 'Absensi_Backup'); return false;">
         <div class="form-group">
           <label>Pilih Status Kehadiran</label>
           <div class="radio-group-2">
             <input type="radio" id="in_backup" name="statusAbsen_Backup" value="IN" required>
-            <label for="in_backup" class="radio-card status-in">🟢 MASUK (Check-In)</label>
+            <label for="in_backup" class="radio-card status-in">🟢 MASUK</label>
             <input type="radio" id="out_backup" name="statusAbsen_Backup" value="OUT" required>
-            <label for="out_backup" class="radio-card status-out">🔴 KELUAR (Check-Out)</label>
+            <label for="out_backup" class="radio-card status-out">🔴 KELUAR</label>
           </div>
         </div>
         <div class="form-group">
@@ -206,11 +302,11 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Nama Relawan (Backup)</label>
+          <label>Nama Relawan Backup</label>
           <input type="text" id="namaRelawan_Backup" list="databaseNama" autocomplete="off" placeholder="Ketik atau pilih nama..." required>
         </div>
         <div class="form-group">
-          <label>Foto Kehadiran</label>
+          <label>Foto Kehadiran (Selfie)</label>
           <input type="file" id="fotoAbsen_Backup" accept="image/*" required>
         </div>
         <button type="submit" class="btn-submit" id="btn-Absensi_Backup">Kirim Absen Backup</button>
@@ -218,115 +314,134 @@
     </div>
 
     <!-- FORM BARANG DATANG -->
-    <div id="form-barang" class="form-container">
-      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+    <div id="form-barang" class="form-wrapper">
+      <button class="btn-back" onclick="backToDashboard()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        Kembali ke Beranda
+      </button>
       <div class="section-title">Logistik Masuk</div>
-      <div class="alert-info">Barang yang masuk di atas jam 15:00 otomatis tercatat untuk menu esok hari.</div>
-      <form id="formBarang" onsubmit="handleFormSubmit(event, 'Barang_Datang'); return false;">
-        <div class="form-group"><label>Nama Barang</label><input type="text" id="namaBarang" required></div>
-        <div class="form-group"><label>Jumlah Volume</label><input type="number" id="jumlahBarang" step="any" required></div>
-        <div class="form-group"><label>Satuan</label>
+      <div class="alert-info">
+        <div>💡</div>
+        <div>Barang yang tiba lewat dari jam 15:00 otomatis tercatat untuk stok esok hari.</div>
+      </div>
+      <form id="formBarang_El" onsubmit="handleFormSubmit(event, 'Barang_Datang'); return false;">
+        <div class="form-group"><label>Nama Barang / Bahan</label><input type="text" id="namaBarang" placeholder="Contoh: Beras, Telur" required></div>
+        <div class="form-group"><label>Jumlah Volume</label><input type="number" id="jumlahBarang" step="any" placeholder="Masukkan angka..." required></div>
+        <div class="form-group">
+          <label>Satuan</label>
           <select id="satuanBarang" required>
-            <option value="" disabled selected>Pilih Satuan</option>
-            <option value="Kg">Kg</option><option value="Liter">Liter</option><option value="Ikat">Ikat</option><option value="Pcs">Pcs</option>
-            <option value="Karung">Karung</option><option value="Dus">Dus</option><option value="Botol">Botol</option><option value="Ons">Ons</option><option value="Pack">Pack</option>
+            <option value="" disabled selected>-- Pilih Satuan --</option>
+            <option value="Kg">Kg</option><option value="Liter">Liter</option><option value="Ikat">Ikat</option>
+            <option value="Pcs">Pcs</option><option value="Karung">Karung</option><option value="Dus">Dus</option>
+            <option value="Botol">Botol</option><option value="Ons">Ons</option><option value="Pack">Pack</option>
+            <option value="Papan">Papan</option><option value="Sisir">Sisir</option>
           </select>
         </div>
-        <div class="form-group"><label>Sumber / Ket</label><input type="text" id="ketBarang"></div>
-        <div class="form-group"><label>Foto Fisik Barang</label><input type="file" id="fotoBarang" accept="image/*" required></div>
+        <div class="form-group"><label>Sumber / Keterangan</label><input type="text" id="ketBarang" placeholder="Opsional (Nama Supplier/Toko)"></div>
+        <div class="form-group"><label>Foto Fisik Barang / Nota</label><input type="file" id="fotoBarang" accept="image/*" required></div>
         <button type="submit" class="btn-submit" id="btn-Barang_Datang">Simpan Logistik</button>
       </form>
     </div>
 
     <!-- FORM DISTRIBUSI -->
-    <div id="form-distribusi" class="form-container">
-      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
-      <div class="section-title">Laporan Distribusi</div>
-      <form id="formDistribusi" onsubmit="handleFormSubmit(event, 'Pendistribusian'); return false;">
-        <div class="form-group"><label>Nama Sekolah</label><input type="text" id="namaSekolah" required></div>
-        <div class="form-group"><label>Total Foodtray</label><input type="number" id="jumlahFoodtray" required></div>
-        <div class="form-group"><label>Nama PJ / Kurir</label><input type="text" id="kurirDistribusi"></div>
-        <div class="form-group"><label>Foto Penyerahan</label><input type="file" id="fotoDistribusi" accept="image/*" required></div>
+    <div id="form-distribusi" class="form-wrapper">
+      <button class="btn-back" onclick="backToDashboard()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        Kembali ke Beranda
+      </button>
+      <div class="section-title">Laporan Pendistribusian</div>
+      <form id="formDistribusi_El" onsubmit="handleFormSubmit(event, 'Pendistribusian'); return false;">
+        <div class="form-group"><label>Nama Sekolah Tujuan</label><input type="text" id="namaSekolah" placeholder="Contoh: SDN 01 Pagi" required></div>
+        <div class="form-group"><label>Total Foodtray (Porsi)</label><input type="number" id="jumlahFoodtray" placeholder="Masukkan total porsi..." required></div>
+        <div class="form-group"><label>Nama Kurir / PJ Distribusi</label><input type="text" id="kurirDistribusi" placeholder="Ketik nama kurir..."></div>
+        <div class="form-group"><label>Foto Bukti Penyerahan</label><input type="file" id="fotoDistribusi" accept="image/*" required></div>
         <button type="submit" class="btn-submit" id="btn-Pendistribusian">Kirim Laporan</button>
       </form>
     </div>
 
     <!-- FORM DATA SAMPAH -->
-    <div id="form-sampah" class="form-container">
-      <button class="btn-back" onclick="backToDashboard()">← Kembali ke Beranda</button>
+    <div id="form-sampah" class="form-wrapper">
+      <button class="btn-back" onclick="backToDashboard()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+        Kembali ke Beranda
+      </button>
       <div class="section-title">Laporan Sisa Sampah</div>
-      <form id="formSampah" onsubmit="handleFormSubmit(event, 'Data_Sampah'); return false;">
-        <div class="form-group"><label>Nama Sekolah</label><input type="text" id="namaSekolahSampah" required></div>
-        <div class="form-group"><label>Menu Makanan</label><input type="text" id="menuSampah" required></div>
-        <div class="form-group"><label>Total Berat Sampah (Kg)</label><input type="number" step="any" id="beratSampah" required></div>
-        <div class="form-group"><label>Foto Bukti Penimbangan</label><input type="file" id="fotoSampah" accept="image/*" required></div>
+      <form id="formSampah_El" onsubmit="handleFormSubmit(event, 'Data_Sampah'); return false;">
+        <div class="form-group"><label>Asal Sekolah</label><input type="text" id="namaSekolahSampah" placeholder="Nama sekolah asal..." required></div>
+        <div class="form-group"><label>Menu Makanan Hari Ini</label><input type="text" id="menuSampah" placeholder="Contoh: Nasi, Ayam Goreng" required></div>
+        <div class="form-group"><label>Total Berat Sampah (Kg)</label><input type="number" step="any" id="beratSampah" placeholder="Masukkan angka desimal jika perlu..." required></div>
+        <div class="form-group"><label>Foto Bukti Timbangan</label><input type="file" id="fotoSampah" accept="image/*" required></div>
         <button type="submit" class="btn-submit" id="btn-Data_Sampah">Kirim Data Sampah</button>
       </form>
     </div>
 
-    <!-- HALAMAN SUKSES -->
-    <div id="success-view" class="form-container" style="text-align: center;">
-      <div class="success-icon-circle">✓</div>
-      <h2 style="border: none; margin-bottom: 8px; color: var(--navy-header);">Laporan Sukses Terkirim!</h2>
-      <p id="successMessageText" style="color: var(--text-muted); margin-bottom: 25px; font-size: 14.5px; line-height: 1.4;"></p>
-      <button type="button" class="btn-submit btn-finish" onclick="backToDashboardFromSuccess()">Selesai & Kembali ke Beranda</button>
+    <!-- HALAMAN SUKSES MODAL -->
+    <div id="success-view" class="form-wrapper">
+      <div class="success-view-content">
+        <div class="success-icon-circle">✓</div>
+        <h2>Sukses Terkirim!</h2>
+        <p id="successMessageText">Data laporan Anda telah berhasil masuk dan tercatat dengan aman di dalam database server.</p>
+        <button type="button" class="btn-submit" style="background-color: var(--success);" onclick="backToDashboardFromSuccess()">Kembali ke Beranda</button>
+      </div>
     </div>
 
-    <!-- Wadah Data Nama Otomatis -->
-    <datalist id="databaseNama"></datalist>
-
-    <div id="loadingText" class="loading">⏳ Memproses & Mengirim data ke server... Mohon tunggu.</div>
-    <div id="msgBox" class="message"></div>
+    <!-- Loading UI & Messages -->
+    <div id="loadingOverlay" class="loading-container">
+      <div class="spinner"></div>
+      <div class="loading-text">Sedang memproses dan mengirim data...</div>
+    </div>
+    <div id="msgBox" class="msg-box"></div>
   </div>
 
   <script>
     // ==========================================================
-    // URL API GOOGLE APPS SCRIPT ANDA (Pastikan link ini benar)
+    // JANGAN UBAH URL INI (URL INI SUDAH BENAR & AKTIF)
     // ==========================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbzncXiGiIn5BH89EH57s_kfSJnB8UDFtX9fTex203Nh9XgBBXwPN4PFAPdBkXW-KimH/exec";
 
     const formIdMap = {
-      'Absensi': 'formAbsensi',
-      'Absensi_Backup': 'formAbsensiBackup',
-      'Barang_Datang': 'formBarang',
-      'Pendistribusian': 'formDistribusi',
-      'Data_Sampah': 'formSampah'
+      'Absensi': 'formAbsensi_El',
+      'Absensi_Backup': 'formAbsensiBackup_El',
+      'Barang_Datang': 'formBarang_El',
+      'Pendistribusian': 'formDistribusi_El',
+      'Data_Sampah': 'formSampah_El'
     };
 
     function openForm(formId) {
-      document.getElementById('dashboard-view').classList.add('hidden');
-      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.querySelectorAll('.form-wrapper').forEach(f => f.classList.remove('active'));
       document.getElementById(formId).classList.add('active');
       document.getElementById('msgBox').style.display = 'none';
+      window.scrollTo(0, 0);
     }
 
     function backToDashboard() {
-      document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.querySelectorAll('.form-wrapper').forEach(f => f.classList.remove('active'));
+      document.getElementById('dashboard-view').style.display = 'flex';
       document.getElementById('msgBox').style.display = 'none';
+      window.scrollTo(0, 0);
     }
 
     function backToDashboardFromSuccess() {
-      document.getElementById('success-view').classList.remove('active');
-      document.getElementById('dashboard-view').classList.remove('hidden');
+      backToDashboard();
       muatDataDashboard(); 
     }
 
     function showMessage(text, isSuccess) {
       const msgBox = document.getElementById('msgBox');
       msgBox.innerText = text;
-      msgBox.className = 'message ' + (isSuccess ? 'success' : 'error');
+      msgBox.className = 'msg-box ' + (isSuccess ? 'msg-success' : 'msg-error');
       msgBox.style.display = 'block';
     }
 
-    // FUNGSI TARIK DATA DENGAN FETCH API (Robust / Tahan Gagal)
+    // FUNGSI TARIK DATA DARI GOOGLE APPS SCRIPT
     function muatDataDashboard() {
       const date = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       document.getElementById('valTanggal').innerText = date.toLocaleDateString('id-ID', options);
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 detik max loading dashboard
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
       fetch(API_URL, {
         method: "POST",
@@ -339,17 +454,14 @@
         try {
           return JSON.parse(textValue);
         } catch (e) {
-          console.error("Respon bukan JSON:", textValue);
-          throw new Error("Server gagal merespon dengan benar. Pastikan URL API Deployment diset ke 'Anyone'.");
+          throw new Error("Server gagal merespon dengan benar. URL API mungkin error.");
         }
       })
       .then(data => {
         clearTimeout(timeoutId);
-        if (!data || data.error) {
-          console.error(data?.message || "Data Error");
-          return;
-        }
-        document.getElementById('valPorsi').innerText = data.totalPorsi || 0;
+        if (!data || data.error) return;
+        
+        document.getElementById('valPorsi').innerText = (data.totalPorsi || 0).toLocaleString('id-ID');
         
         let listHTML = "";
         let totalSekolahAktif = 0;
@@ -360,14 +472,17 @@
               totalSekolahAktif++;
               listHTML += `
                 <div class="school-item">
-                  <div class="school-info"><h4>${row[0]}</h4><p>⏱ Jadwal: ${row[1] || '-'}</p></div>
-                  <div class="school-portion">${row[2] || 0} Porsi</div>
+                  <div class="school-info">
+                    <h4>${row[0]}</h4>
+                    <p>🕒 Jadwal: ${row[1] || '-'}</p>
+                  </div>
+                  <div class="school-portion">${(row[2] || 0).toLocaleString('id-ID')} Porsi</div>
                 </div>`;
             }
           });
         }
         
-        if (listHTML === "") listHTML = "<div style='text-align:center; color:#64748b; padding:20px;'>Belum ada jadwal</div>";
+        if (listHTML === "") listHTML = "<div style='text-align:center; color:#64748b; padding:30px 0;'>Belum ada jadwal hari ini</div>";
         document.getElementById('schoolListContainer').innerHTML = listHTML;
         document.getElementById('valSekolah').innerText = totalSekolahAktif + " Titik";
 
@@ -381,14 +496,13 @@
       })
       .catch(err => {
         clearTimeout(timeoutId);
-        console.error("Gagal memuat data dari server", err);
-        document.getElementById('schoolListContainer').innerHTML = "<div style='text-align:center; color:#b91c1c; padding:20px;'>Gagal terhubung ke server Google. Refresh halaman.</div>";
+        document.getElementById('schoolListContainer').innerHTML = "<div style='text-align:center; color:#dc2626; padding:20px;'>Gagal terhubung ke server. Silakan refresh halaman.</div>";
       });
     }
 
     window.onload = function() { muatDataDashboard(); };
 
-    // KOMPRESI GAMBAR AGAR UPLOAD LEBIH CEPAT
+    // KOMPRESI GAMBAR AGAR TIDAK BERAT
     function compressAndUpload(file, callback) {  
       const reader = new FileReader();  
       reader.onload = function(e) {  
@@ -408,7 +522,6 @@
           const ctx = canvas.getContext('2d');  
           ctx.drawImage(img, 0, 0, width, height);  
             
-          // Kualitas 40% sangat mempercepat upload namun masih jelas untuk verifikasi
           const dataUrl = canvas.toDataURL('image/jpeg', 0.4);  
           callback(dataUrl);  
         }  
@@ -418,13 +531,15 @@
       reader.readAsDataURL(file);  
     }
 
-    // PENGIRIMAN DATA (ANTI-BUG / TIMEOUT HANDLER)
+    // PENGIRIMAN DATA FORM
     function handleFormSubmit(event, type) {
       event.preventDefault(); 
       const btn = document.getElementById('btn-' + type);
-      const loading = document.getElementById('loadingText');
+      const loading = document.getElementById('loadingOverlay');
         
-      btn.disabled = true; loading.style.display = 'block'; document.getElementById('msgBox').style.display = 'none';
+      btn.disabled = true; 
+      loading.style.display = 'block'; 
+      document.getElementById('msgBox').style.display = 'none';
       let formData = {}; let fileInput = null;
         
       try {
@@ -432,23 +547,13 @@
           const statusEl = document.querySelector('input[name="statusAbsen"]:checked');
           const divisiEl = document.querySelector('input[name="divisiRelawan"]:checked');
           if(!statusEl || !divisiEl) throw new Error("Pilih Status dan Divisi terlebih dahulu.");
-          
-          formData = { 
-            nama: document.getElementById('namaRelawan').value, 
-            status: statusEl.value, 
-            divisi: divisiEl.value 
-          };
+          formData = { nama: document.getElementById('namaRelawan').value, status: statusEl.value, divisi: divisiEl.value };
           fileInput = document.getElementById('fotoAbsen');
         } else if (type === 'Absensi_Backup') {
           const statusEl = document.querySelector('input[name="statusAbsen_Backup"]:checked');
           const divisiEl = document.querySelector('input[name="divisiRelawan_Backup"]:checked');
           if(!statusEl || !divisiEl) throw new Error("Pilih Status dan Divisi terlebih dahulu.");
-
-          formData = { 
-            nama: document.getElementById('namaRelawan_Backup').value, 
-            status: statusEl.value, 
-            divisi: divisiEl.value 
-          };
+          formData = { nama: document.getElementById('namaRelawan_Backup').value, status: statusEl.value, divisi: divisiEl.value };
           fileInput = document.getElementById('fotoAbsen_Backup');
         } else if (type === 'Barang_Datang') {
           formData = { namaBarang: document.getElementById('namaBarang').value, jumlah: document.getElementById('jumlahBarang').value, satuan: document.getElementById('satuanBarang').value, keterangan: document.getElementById('ketBarang').value };
@@ -467,7 +572,6 @@
             const fileData = { base64: base64Data, name: fileAsli.name, type: 'image/jpeg' };
               
             const controller = new AbortController();
-            // Batas waktu pengiriman data adalah 45 Detik
             const timeoutId = setTimeout(() => controller.abort(), 45000); 
 
             fetch(API_URL, {
@@ -483,12 +587,7 @@
             })
             .then(async response => {
               const textValue = await response.text();
-              try {
-                return JSON.parse(textValue);
-              } catch (e) {
-                console.error("Respon bukan JSON:", textValue);
-                throw new Error("Server mengembalikan format tidak valid (Cek URL Web App).");
-              }
+              try { return JSON.parse(textValue); } catch (e) { throw new Error("Server format invalid."); }
             })
             .then(res => {
               clearTimeout(timeoutId);
@@ -497,11 +596,12 @@
                 const targetFormId = formIdMap[type];
                 if (targetFormId) { document.getElementById(targetFormId).reset(); }
                   
-                document.querySelectorAll('.form-container').forEach(f => f.classList.remove('active'));
-                document.getElementById('dashboard-view').classList.add('hidden');
+                document.querySelectorAll('.form-wrapper').forEach(f => f.classList.remove('active'));
+                document.getElementById('dashboard-view').style.display = 'none';
                   
                 document.getElementById('successMessageText').innerText = res.message;
                 document.getElementById('success-view').classList.add('active');
+                window.scrollTo(0, 0);
               } else { 
                 showMessage("Gagal tersimpan: " + res.message, false); 
               }
@@ -510,7 +610,7 @@
               clearTimeout(timeoutId);
               btn.disabled = false; loading.style.display = 'none'; 
               if (err.name === 'AbortError') {
-                showMessage("Gagal. Koneksi internet terputus atau sangat lambat (Timeout). Silakan coba lagi.", false);
+                showMessage("Gagal. Koneksi internet sangat lambat (Timeout). Silakan coba lagi.", false);
               } else {
                 showMessage("Error Jaringan / Server tidak merespon.", false);
               }
@@ -520,7 +620,7 @@
           btn.disabled = false; loading.style.display = 'none'; showMessage("Foto wajib dilampirkan.", false);
         }
       } catch (err) {
-        btn.disabled = false; loading.style.display = 'none'; showMessage("Error sistem form: " + err, false);
+        btn.disabled = false; loading.style.display = 'none'; showMessage("Error form: " + err.message, false);
       }
     }
   </script>
